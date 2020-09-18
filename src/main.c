@@ -5,6 +5,7 @@
 
 struct GameCharacter link;
 UBYTE spriteSize = 8;
+UBYTE flipWalkCycle;
 
 void moveCharacter(struct GameCharacter *character, UINT8 x, UINT8 y)
 {
@@ -42,10 +43,34 @@ void performantDelay(UINT8 numloops)
     }
 }
 
-void main() {
-    set_sprite_data(0, 4, LinkSpriteData);
-    setupLink();
+void updateWalkAnimation() {
+    if(!flipWalkCycle) {
+        flipWalkCycle = 1;
+        set_sprite_tile(0, 4);
+        set_sprite_tile(1, 5);
+        set_sprite_tile(2, 6);
+        set_sprite_tile(3, 7);
+    } else {
+        flipWalkCycle = 0;
+        set_sprite_tile(0, 0);
+        set_sprite_tile(1, 1);
+        set_sprite_tile(2, 2);
+        set_sprite_tile(3, 3);
+    }
+}
 
+void main()
+{
+    // sprite data contains 8 8x8 sprites
+    // tiles 0-3 are of link facing down with his right foot forwards
+    // tiles 4-7 are of link facing down with his left foot forwards
+    set_sprite_data(0, 8, LinkSpriteData);
+    setupLink();
     SHOW_SPRITES;
     DISPLAY_ON;
+
+    while(1) {
+        updateWalkAnimation();
+        performantDelay(20);
+    }
 }

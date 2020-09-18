@@ -10,7 +10,7 @@
   Compression          : None.
   Counter              : None.
   Tile size            : 8 x 8
-  Tiles                : 0 to 3
+  Tiles                : 0 to 7
 
   Palette colors       : None.
   SGB Palette          : None.
@@ -24,7 +24,7 @@
 
 
 /* Bank of tiles. */
-#define LinkBank 0
+#define LinkSpriteDataBank 0
 /* Start of tile array. */
 extern unsigned char LinkSpriteData[];
 
