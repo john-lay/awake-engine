@@ -69,91 +69,91 @@ void unmirrorSprite(struct GameCharacter *sprite)
     }
 }
 
-void walkDown()
+void walkDown(struct GameCharacter *sprite)
 {
     unmirrorSprite(&link);
 
     if (!flipWalkCycle)
     {
         flipWalkCycle = 1;
-        set_sprite_tile(0, 4);
-        set_sprite_tile(1, 5);
-        set_sprite_tile(2, 6);
-        set_sprite_tile(3, 7);
+        set_sprite_tile(sprite->spriteIds[0], 4);
+        set_sprite_tile(sprite->spriteIds[1], 5);
+        set_sprite_tile(sprite->spriteIds[2], 6);
+        set_sprite_tile(sprite->spriteIds[3], 7);
     }
     else
     {
         flipWalkCycle = 0;
-        set_sprite_tile(0, 0);
-        set_sprite_tile(1, 1);
-        set_sprite_tile(2, 2);
-        set_sprite_tile(3, 3);
+        set_sprite_tile(sprite->spriteIds[0], 0);
+        set_sprite_tile(sprite->spriteIds[1], 1);
+        set_sprite_tile(sprite->spriteIds[2], 2);
+        set_sprite_tile(sprite->spriteIds[3], 3);
     }
 }
 
-void walkUp()
+void walkUp(struct GameCharacter *sprite)
 {
     unmirrorSprite(&link);
 
     if (!flipWalkCycle)
     {
         flipWalkCycle = 1;
-        set_sprite_tile(0, 12);
-        set_sprite_tile(1, 13);
-        set_sprite_tile(2, 14);
-        set_sprite_tile(3, 15);
+        set_sprite_tile(sprite->spriteIds[0], 12);
+        set_sprite_tile(sprite->spriteIds[1], 13);
+        set_sprite_tile(sprite->spriteIds[2], 14);
+        set_sprite_tile(sprite->spriteIds[3], 15);
     }
     else
     {
         flipWalkCycle = 0;
-        set_sprite_tile(0, 8);
-        set_sprite_tile(1, 9);
-        set_sprite_tile(2, 10);
-        set_sprite_tile(3, 11);
+        set_sprite_tile(sprite->spriteIds[0], 8);
+        set_sprite_tile(sprite->spriteIds[1], 9);
+        set_sprite_tile(sprite->spriteIds[2], 10);
+        set_sprite_tile(sprite->spriteIds[3], 11);
     }
 }
 
-void walkRight()
+void walkRight(struct GameCharacter *sprite)
 {
     unmirrorSprite(&link);
 
     if (!flipWalkCycle)
     {
         flipWalkCycle = 1;
-        set_sprite_tile(0, 20);
-        set_sprite_tile(1, 21);
-        set_sprite_tile(2, 22);
-        set_sprite_tile(3, 23);
+        set_sprite_tile(sprite->spriteIds[0], 20);
+        set_sprite_tile(sprite->spriteIds[1], 21);
+        set_sprite_tile(sprite->spriteIds[2], 22);
+        set_sprite_tile(sprite->spriteIds[3], 23);
     }
     else
     {
         flipWalkCycle = 0;
-        set_sprite_tile(0, 16);
-        set_sprite_tile(1, 17);
-        set_sprite_tile(2, 18);
-        set_sprite_tile(3, 19);
+        set_sprite_tile(sprite->spriteIds[0], 16);
+        set_sprite_tile(sprite->spriteIds[1], 17);
+        set_sprite_tile(sprite->spriteIds[2], 18);
+        set_sprite_tile(sprite->spriteIds[3], 19);
     }
 }
 
-void walkLeft()
+void walkLeft(struct GameCharacter *sprite)
 {
     mirrorSprite(&link);
 
     if (!flipWalkCycle)
     {
         flipWalkCycle = 1;
-        set_sprite_tile(0, 21);
-        set_sprite_tile(1, 20);
-        set_sprite_tile(2, 23);
-        set_sprite_tile(3, 22);
+        set_sprite_tile(sprite->spriteIds[0], 21);
+        set_sprite_tile(sprite->spriteIds[1], 20);
+        set_sprite_tile(sprite->spriteIds[2], 23);
+        set_sprite_tile(sprite->spriteIds[3], 22);
     }
     else
     {
         flipWalkCycle = 0;
-        set_sprite_tile(0, 17);
-        set_sprite_tile(1, 16);
-        set_sprite_tile(2, 19);
-        set_sprite_tile(3, 18);
+        set_sprite_tile(sprite->spriteIds[0], 17);
+        set_sprite_tile(sprite->spriteIds[1], 16);
+        set_sprite_tile(sprite->spriteIds[2], 19);
+        set_sprite_tile(sprite->spriteIds[3], 18);
     }
 }
 
@@ -161,25 +161,25 @@ void processInput()
 {
     if (joypad() & J_UP)
     {
-        walkUp();
+        walkUp(&link);
         link.y -= movementSpeed;
         moveCharacter(&link, link.x, link.y);
     }
     if (joypad() & J_DOWN)
     {
-        walkDown();
+        walkDown(&link);
         link.y += movementSpeed;
         moveCharacter(&link, link.x, link.y);
     }
     if (joypad() & J_LEFT)
     {
-        walkLeft();
+        walkLeft(&link);
         link.x -= movementSpeed;
         moveCharacter(&link, link.x, link.y);
     }
     if (joypad() & J_RIGHT)
     {
-        walkRight();
+        walkRight(&link);
         link.x += movementSpeed;
         moveCharacter(&link, link.x, link.y);
     }
