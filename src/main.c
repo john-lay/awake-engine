@@ -6,6 +6,7 @@
 struct GameCharacter link;
 UBYTE spriteSize = 8;
 UBYTE flipWalkCycle;
+UBYTE movementSpeed = 5;
 
 void moveCharacter(struct GameCharacter *character, UINT8 x, UINT8 y)
 {
@@ -59,6 +60,25 @@ void updateWalkAnimation() {
     }
 }
 
+void processInput() {
+    if (joypad() & J_UP) {
+        link.y -= movementSpeed;
+        moveCharacter(&link, link.x, link.y);
+    }
+    if (joypad() & J_DOWN) {
+        link.y += movementSpeed;
+        moveCharacter(&link, link.x, link.y);
+    }
+    if (joypad() & J_LEFT) {
+        link.x -= movementSpeed;
+        moveCharacter(&link, link.x, link.y);
+    }
+    if (joypad() & J_RIGHT) {
+        link.x += movementSpeed;
+        moveCharacter(&link, link.x, link.y);
+    }
+}
+
 void main()
 {
     // sprite data contains 8 8x8 sprites
@@ -70,7 +90,8 @@ void main()
     DISPLAY_ON;
 
     while(1) {
+        processInput();
         updateWalkAnimation();
-        performantDelay(20);
+        performantDelay(15);
     }
 }

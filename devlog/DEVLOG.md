@@ -1,6 +1,10 @@
 # Developer log
 Track the progress of the game engine project.
  
+### 12/10/20
+Implement basic movement.\
+![walking](https://github.com/john-lay/awake-engine/raw/develop/devlog/basic-movement.gif)
+
 ### 18/09/20
 Animate Link walking.\
 ![walking](https://github.com/john-lay/awake-engine/raw/develop/devlog/walking.gif)
