@@ -45,33 +45,33 @@ void sleep(UINT8 numloops)
     }
 }
 
-void mirrorSprite()
+void mirrorSprite(struct GameCharacter *sprite)
 {
     if (!spriteMirrored)
     {
         spriteMirrored = 1;
-        set_sprite_prop(0, S_FLIPX);
-        set_sprite_prop(1, S_FLIPX);
-        set_sprite_prop(2, S_FLIPX);
-        set_sprite_prop(3, S_FLIPX);
+        set_sprite_prop(sprite->spriteIds[0], S_FLIPX);
+        set_sprite_prop(sprite->spriteIds[1], S_FLIPX);
+        set_sprite_prop(sprite->spriteIds[2], S_FLIPX);
+        set_sprite_prop(sprite->spriteIds[3], S_FLIPX);
     }
 }
 
-void unmirrorSprite()
+void unmirrorSprite(struct GameCharacter *sprite)
 {
     if (spriteMirrored)
     {
         spriteMirrored = 0;
-        set_sprite_prop(0, get_sprite_prop(0) & ~S_FLIPX);
-        set_sprite_prop(1, get_sprite_prop(1) & ~S_FLIPX);
-        set_sprite_prop(2, get_sprite_prop(2) & ~S_FLIPX);
-        set_sprite_prop(3, get_sprite_prop(3) & ~S_FLIPX);
+        set_sprite_prop(sprite->spriteIds[0], get_sprite_prop(0) & ~S_FLIPX);
+        set_sprite_prop(sprite->spriteIds[1], get_sprite_prop(1) & ~S_FLIPX);
+        set_sprite_prop(sprite->spriteIds[2], get_sprite_prop(2) & ~S_FLIPX);
+        set_sprite_prop(sprite->spriteIds[3], get_sprite_prop(3) & ~S_FLIPX);
     }
 }
 
 void walkDown()
 {
-    unmirrorSprite();
+    unmirrorSprite(&link);
 
     if (!flipWalkCycle)
     {
@@ -93,7 +93,7 @@ void walkDown()
 
 void walkUp()
 {
-    unmirrorSprite();
+    unmirrorSprite(&link);
 
     if (!flipWalkCycle)
     {
@@ -115,7 +115,7 @@ void walkUp()
 
 void walkRight()
 {
-    unmirrorSprite();
+    unmirrorSprite(&link);
 
     if (!flipWalkCycle)
     {
@@ -137,7 +137,7 @@ void walkRight()
 
 void walkLeft()
 {
-    mirrorSprite();
+    mirrorSprite(&link);
 
     if (!flipWalkCycle)
     {
