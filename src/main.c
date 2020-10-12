@@ -36,7 +36,7 @@ void setupLink()
     moveCharacter(&link, link.x, link.y);
 }
 
-void performantDelay(UINT8 numloops)
+void sleep(UINT8 numloops)
 {
     UINT8 i;
     for (i = 0; i < numloops; i++)
@@ -202,6 +202,6 @@ void main()
     while (1)
     {
         processInput();
-        performantDelay(10);
+        sleep(10);
     }
 }
