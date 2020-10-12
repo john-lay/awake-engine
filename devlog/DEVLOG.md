@@ -2,6 +2,10 @@
 Track the progress of the game engine project.
  
 ### 12/10/20
+Ensure Link faces the correct direction while moving.\
+![walking](https://github.com/john-lay/awake-engine/raw/develop/devlog/correct-face-movement.gif)
+ 
+### 12/10/20
 Implement basic movement.\
 ![walking](https://github.com/john-lay/awake-engine/raw/develop/devlog/basic-movement.gif)
 
