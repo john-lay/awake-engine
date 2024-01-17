@@ -2,12 +2,14 @@
 #include <stdio.h>
 #include "../sprites/link.c"
 #include "GameCharacter.c"
+#include "../include/game_time.h"
 
-struct GameCharacter link;
+struct GameCharacter player;
 UBYTE spriteSize = 8;
 UBYTE flipWalkCycle;
 UBYTE spriteMirrored;
-UBYTE movementSpeed = 5;
+UBYTE movementSpeed = 1;
+UINT8 game_time = 0;
 
 void moveCharacter(struct GameCharacter *character, UINT8 x, UINT8 y)
 {
@@ -19,21 +21,21 @@ void moveCharacter(struct GameCharacter *character, UINT8 x, UINT8 y)
 
 void setupLink()
 {
-    link.x = 80;
-    link.y = 130;
-    link.width = 16;
-    link.height = 16;
+    player.x = 80;
+    player.y = 130;
+    player.width = 16;
+    player.height = 16;
 
     set_sprite_tile(0, 0);
-    link.spriteIds[0] = 0;
+    player.spriteIds[0] = 0;
     set_sprite_tile(1, 1);
-    link.spriteIds[1] = 1;
+    player.spriteIds[1] = 1;
     set_sprite_tile(2, 2);
-    link.spriteIds[2] = 2;
+    player.spriteIds[2] = 2;
     set_sprite_tile(3, 3);
-    link.spriteIds[3] = 3;
+    player.spriteIds[3] = 3;
 
-    moveCharacter(&link, link.x, link.y);
+    moveCharacter(&player, player.x, player.y);
 }
 
 void sleep(UINT8 numloops)
@@ -69,9 +71,9 @@ void unmirrorSprite(struct GameCharacter *sprite)
     }
 }
 
-void walkDown(struct GameCharacter *sprite)
+void animateDown(struct GameCharacter *sprite)
 {
-    unmirrorSprite(&link);
+    unmirrorSprite(&player);
 
     if (!flipWalkCycle)
     {
@@ -91,9 +93,9 @@ void walkDown(struct GameCharacter *sprite)
     }
 }
 
-void walkUp(struct GameCharacter *sprite)
+void animateUp(struct GameCharacter *sprite)
 {
-    unmirrorSprite(&link);
+    unmirrorSprite(&player);
 
     if (!flipWalkCycle)
     {
@@ -113,9 +115,9 @@ void walkUp(struct GameCharacter *sprite)
     }
 }
 
-void walkRight(struct GameCharacter *sprite)
+void animateRight(struct GameCharacter *sprite)
 {
-    unmirrorSprite(&link);
+    unmirrorSprite(&player);
 
     if (!flipWalkCycle)
     {
@@ -135,9 +137,9 @@ void walkRight(struct GameCharacter *sprite)
     }
 }
 
-void walkLeft(struct GameCharacter *sprite)
+void animateLeft(struct GameCharacter *sprite)
 {
-    mirrorSprite(&link);
+    mirrorSprite(&player);
 
     if (!flipWalkCycle)
     {
@@ -161,27 +163,27 @@ void processInput()
 {
     if (joypad() & J_UP)
     {
-        walkUp(&link);
-        link.y -= movementSpeed;
-        moveCharacter(&link, link.x, link.y);
+        if (IS_FRAME_8) animateUp(&player);
+        player.y -= movementSpeed;
+        moveCharacter(&player, player.x, player.y);        
     }
     if (joypad() & J_DOWN)
     {
-        walkDown(&link);
-        link.y += movementSpeed;
-        moveCharacter(&link, link.x, link.y);
+        if (IS_FRAME_8) animateDown(&player);
+        player.y += movementSpeed;
+        moveCharacter(&player, player.x, player.y);
     }
     if (joypad() & J_LEFT)
     {
-        walkLeft(&link);
-        link.x -= movementSpeed;
-        moveCharacter(&link, link.x, link.y);
+        if (IS_FRAME_8) animateLeft(&player);
+        player.x -= movementSpeed;
+        moveCharacter(&player, player.x, player.y);
     }
     if (joypad() & J_RIGHT)
     {
-        walkRight(&link);
-        link.x += movementSpeed;
-        moveCharacter(&link, link.x, link.y);
+        if (IS_FRAME_8) animateRight(&player);
+        player.x += movementSpeed;
+        moveCharacter(&player, player.x, player.y);
     }
 }
 
@@ -201,7 +203,9 @@ void main()
 
     while (1)
     {
-        processInput();
-        sleep(10);
+        processInput();   
+        game_time++;
+        // sleep(1);
+        wait_vbl_done();
     }
 }
