@@ -8,7 +8,8 @@ struct GameCharacter player;
 UBYTE spriteSize = 8;
 UBYTE flipWalkCycle;
 UBYTE spriteMirrored;
-UBYTE movementSpeed = 1;
+UBYTE movementSpeed = 2;
+UBYTE strafeSpeed = 1;
 UINT8 game_time = 0;
 
 void moveCharacter(struct GameCharacter *character, UINT8 x, UINT8 y)
@@ -19,7 +20,7 @@ void moveCharacter(struct GameCharacter *character, UINT8 x, UINT8 y)
     move_sprite(character->spriteIds[3], x + spriteSize, y + spriteSize);
 }
 
-void setupLink()
+void setupPlayer()
 {
     player.x = 80;
     player.y = 130;
@@ -163,24 +164,32 @@ void processInput()
 {
     if (joypad() & J_UP)
     {
+        if (joypad() & J_LEFT) player.x -= strafeSpeed;
+        if (joypad() & J_RIGHT) player.x += strafeSpeed;
         if (IS_FRAME_8) animateUp(&player);
         player.y -= movementSpeed;
-        moveCharacter(&player, player.x, player.y);        
+        moveCharacter(&player, player.x, player.y);
     }
-    if (joypad() & J_DOWN)
+    else if (joypad() & J_DOWN)
     {
+        if (joypad() & J_LEFT) player.x -= strafeSpeed;
+        if (joypad() & J_RIGHT) player.x += strafeSpeed;
         if (IS_FRAME_8) animateDown(&player);
         player.y += movementSpeed;
         moveCharacter(&player, player.x, player.y);
     }
-    if (joypad() & J_LEFT)
+    else if (joypad() & J_LEFT)
     {
+        if (joypad() & J_UP) player.y -= strafeSpeed;
+        if (joypad() & J_DOWN) player.y += strafeSpeed;
         if (IS_FRAME_8) animateLeft(&player);
         player.x -= movementSpeed;
         moveCharacter(&player, player.x, player.y);
     }
-    if (joypad() & J_RIGHT)
+    else if (joypad() & J_RIGHT)
     {
+        if (joypad() & J_UP) player.y -= strafeSpeed;
+        if (joypad() & J_DOWN) player.y += strafeSpeed;
         if (IS_FRAME_8) animateRight(&player);
         player.x += movementSpeed;
         moveCharacter(&player, player.x, player.y);
@@ -197,7 +206,7 @@ void main()
     // tiles 16-19 are of link facing right with his right foot forwards
     // tiles 20-23 are of link facing right with his left foot forwards
     set_sprite_data(0, 24, LinkSpriteData);
-    setupLink();
+    setupPlayer();
     SHOW_SPRITES;
     DISPLAY_ON;
 
