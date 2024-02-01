@@ -11,6 +11,7 @@ UBYTE spriteMirrored;
 UBYTE movementSpeed = 2;
 UBYTE strafeSpeed = 1;
 UINT8 game_time = 0;
+UINT8 previous_direction;
 
 void moveCharacter(struct GameCharacter *character, UINT8 x, UINT8 y)
 {
@@ -26,6 +27,7 @@ void setupPlayer()
     player.y = 130;
     player.width = 16;
     player.height = 16;
+    player.facing = J_DOWN;
 
     set_sprite_tile(0, 0);
     player.spriteIds[0] = 0;
@@ -160,28 +162,112 @@ void animateLeft(struct GameCharacter *sprite)
     }
 }
 
+void animatePlayer()
+{
+    if (player.facing == J_UP) {
+        animateUp(&player);
+    } 
+    else if (player.facing == J_DOWN) {
+        animateDown(&player);
+    }
+    else if (player.facing == J_LEFT) {
+        animateLeft(&player);
+    }
+    else if (player.facing == J_RIGHT) {
+        animateRight(&player);
+    }
+}
+
+// UBYTE playerWithinScene() {
+//     return player.y > 16 && player.y < 144 && player.x > 8 && player.x < 156;
+// }
+
+void moveUp() {
+    if (player.y > 16) {
+        player.y -= movementSpeed;
+        previous_direction = J_UP;
+        moveCharacter(&player, player.x, player.y);
+    }
+}
+
+void moveDown() {
+    if (player.y < 144) {
+        player.y += movementSpeed;
+        previous_direction = J_DOWN;
+        moveCharacter(&player, player.x, player.y);
+    }
+}
+
+void moveLeft() {
+    if (player.x > 8) {
+        player.x -= movementSpeed;
+        previous_direction = J_LEFT;
+        moveCharacter(&player, player.x, player.y);
+    }
+}
+
+void moveRight() {
+    if (player.x < 156) {
+        player.x += movementSpeed;
+        previous_direction = J_RIGHT;
+        moveCharacter(&player, player.x, player.y);
+    }
+}
+
+void updateFacing() {
+    int key = joypad();
+    if (key & J_UP && !(key & J_LEFT) && !(key & J_RIGHT)) {
+        player.facing = J_UP;
+    }
+    else if (key & J_DOWN && !(key & J_LEFT) && !(key & J_RIGHT)) {
+        player.facing = J_DOWN;
+    }
+    else if (key & J_LEFT && !(key & J_UP) && !(key & J_DOWN)) {
+        player.facing = J_LEFT;
+    }
+    else if (key & J_RIGHT && !(key & J_UP) && !(key & J_DOWN)) {
+        player.facing = J_RIGHT;
+    }
+}
+
 void handleInput()
 {
-    if (joypad() & J_UP)
-    {
-        if (player.y > 16) {
-        }
+    // Get dpad input
+    int key = joypad();
+    updateFacing();
+
+    if (key & J_UP) {
+        if (key & J_LEFT) player.x -= strafeSpeed;
+        if (key & J_RIGHT) player.x += strafeSpeed;
+        moveUp();
+        if (IS_FRAME_8) animatePlayer();
+    } else if (key & J_DOWN) {
+        if (key & J_LEFT) player.x -= strafeSpeed;
+        if (key & J_RIGHT) player.x += strafeSpeed;
+        moveDown();
+        if (IS_FRAME_8) animatePlayer();
+    } else if (key & J_LEFT) {
+        if (key & J_UP) player.y -= strafeSpeed;
+        if (key & J_DOWN) player.y += strafeSpeed;
+        moveLeft();
+        if (IS_FRAME_8) animatePlayer();
+    } else if (key & J_RIGHT) {
+        if (key & J_UP) player.y -= strafeSpeed;
+        if (key & J_DOWN) player.y += strafeSpeed;
+        moveRight();
+        if (IS_FRAME_8) animatePlayer();
     }
-    else if (joypad() & J_DOWN)
-    {
-        if (player.y < 144) {
-        }
-    }
-    else if (joypad() & J_LEFT)
-    {
-        if (player.x > 8) {
-        }
-    }
-    else if (joypad() & J_RIGHT)
-    {
-        if (player.x < 156) {
-        }
-    }
+
+    // // Check if the player changed direction
+    // if (previous_direction != 0 && previous_direction != key) {
+    //     if (previous_direction == J_UP || previous_direction == J_DOWN) {
+    //         if (key & J_LEFT) player.x -= strafeSpeed;
+    //         if (key & J_RIGHT) player.x += strafeSpeed;
+    //     } else if (previous_direction == J_LEFT || previous_direction == J_RIGHT) {
+    //         if (key & J_UP) player.y -= strafeSpeed;
+    //         if (key & J_DOWN) player.y += strafeSpeed;
+    //     }
+    // }
 }
 
 void main()

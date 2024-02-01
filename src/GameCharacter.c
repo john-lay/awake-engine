@@ -6,4 +6,5 @@ struct GameCharacter {
     UINT8 y;
     UINT8 width;
     UINT8 height;
+    UINT8 facing;
 };
