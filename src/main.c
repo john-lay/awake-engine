@@ -178,40 +178,44 @@ void animatePlayer()
     }
 }
 
-// UBYTE playerWithinScene() {
-//     return player.y > 16 && player.y < 144 && player.x > 8 && player.x < 156;
-// }
+UBYTE screenEdgeTop() {
+    return player.y > 16;
+}
+
+UBYTE screenEdgeBottom() {
+    return player.y < 144;
+}
+
+UBYTE screenEdgeLeft() {
+    return player.x > 8;
+}
+
+UBYTE screenEdgeRight() {
+    return player.x < 154;
+}
 
 void moveUp() {
-    if (player.y > 16) {
-        player.y -= movementSpeed;
-        previous_direction = J_UP;
-        moveCharacter(&player, player.x, player.y);
-    }
+    player.y -= movementSpeed;
+    previous_direction = J_UP;
+    moveCharacter(&player, player.x, player.y);
 }
 
 void moveDown() {
-    if (player.y < 144) {
-        player.y += movementSpeed;
-        previous_direction = J_DOWN;
-        moveCharacter(&player, player.x, player.y);
-    }
+    player.y += movementSpeed;
+    previous_direction = J_DOWN;
+    moveCharacter(&player, player.x, player.y);
 }
 
 void moveLeft() {
-    if (player.x > 8) {
-        player.x -= movementSpeed;
-        previous_direction = J_LEFT;
-        moveCharacter(&player, player.x, player.y);
-    }
+    player.x -= movementSpeed;
+    previous_direction = J_LEFT;
+    moveCharacter(&player, player.x, player.y);    
 }
 
 void moveRight() {
-    if (player.x < 156) {
-        player.x += movementSpeed;
-        previous_direction = J_RIGHT;
-        moveCharacter(&player, player.x, player.y);
-    }
+    player.x += movementSpeed;
+    previous_direction = J_RIGHT;
+    moveCharacter(&player, player.x, player.y);
 }
 
 void updateFacing() {
@@ -236,38 +240,27 @@ void handleInput()
     int key = joypad();
     updateFacing();
 
-    if (key & J_UP) {
-        if (key & J_LEFT) player.x -= strafeSpeed;
-        if (key & J_RIGHT) player.x += strafeSpeed;
+    if (key & J_UP && screenEdgeTop()) {
+        if (key & J_LEFT && screenEdgeLeft()) player.x -= strafeSpeed;
+        if (key & J_RIGHT && screenEdgeRight()) player.x += strafeSpeed;
         moveUp();
         if (IS_FRAME_8) animatePlayer();
-    } else if (key & J_DOWN) {
-        if (key & J_LEFT) player.x -= strafeSpeed;
-        if (key & J_RIGHT) player.x += strafeSpeed;
+    } else if (key & J_DOWN && screenEdgeBottom()) {
+        if (key & J_LEFT && screenEdgeLeft()) player.x -= strafeSpeed;
+        if (key & J_RIGHT && screenEdgeRight()) player.x += strafeSpeed;
         moveDown();
         if (IS_FRAME_8) animatePlayer();
-    } else if (key & J_LEFT) {
-        if (key & J_UP) player.y -= strafeSpeed;
-        if (key & J_DOWN) player.y += strafeSpeed;
+    } else if (key & J_LEFT && screenEdgeLeft()) {
+        if (key & J_UP && screenEdgeTop()) player.y -= strafeSpeed;
+        if (key & J_DOWN && screenEdgeBottom()) player.y += strafeSpeed;
         moveLeft();
         if (IS_FRAME_8) animatePlayer();
-    } else if (key & J_RIGHT) {
-        if (key & J_UP) player.y -= strafeSpeed;
-        if (key & J_DOWN) player.y += strafeSpeed;
+    } else if (key & J_RIGHT && screenEdgeRight()) {
+        if (key & J_UP && screenEdgeTop()) player.y -= strafeSpeed;
+        if (key & J_DOWN && screenEdgeBottom()) player.y += strafeSpeed;
         moveRight();
         if (IS_FRAME_8) animatePlayer();
     }
-
-    // // Check if the player changed direction
-    // if (previous_direction != 0 && previous_direction != key) {
-    //     if (previous_direction == J_UP || previous_direction == J_DOWN) {
-    //         if (key & J_LEFT) player.x -= strafeSpeed;
-    //         if (key & J_RIGHT) player.x += strafeSpeed;
-    //     } else if (previous_direction == J_LEFT || previous_direction == J_RIGHT) {
-    //         if (key & J_UP) player.y -= strafeSpeed;
-    //         if (key & J_DOWN) player.y += strafeSpeed;
-    //     }
-    // }
 }
 
 void main()
