@@ -160,39 +160,27 @@ void animateLeft(struct GameCharacter *sprite)
     }
 }
 
-void processInput()
+void handleInput()
 {
     if (joypad() & J_UP)
     {
-        if (joypad() & J_LEFT) player.x -= strafeSpeed;
-        if (joypad() & J_RIGHT) player.x += strafeSpeed;
-        if (IS_FRAME_8) animateUp(&player);
-        player.y -= movementSpeed;
-        moveCharacter(&player, player.x, player.y);
+        if (player.y > 16) {
+        }
     }
     else if (joypad() & J_DOWN)
     {
-        if (joypad() & J_LEFT) player.x -= strafeSpeed;
-        if (joypad() & J_RIGHT) player.x += strafeSpeed;
-        if (IS_FRAME_8) animateDown(&player);
-        player.y += movementSpeed;
-        moveCharacter(&player, player.x, player.y);
+        if (player.y < 144) {
+        }
     }
     else if (joypad() & J_LEFT)
     {
-        if (joypad() & J_UP) player.y -= strafeSpeed;
-        if (joypad() & J_DOWN) player.y += strafeSpeed;
-        if (IS_FRAME_8) animateLeft(&player);
-        player.x -= movementSpeed;
-        moveCharacter(&player, player.x, player.y);
+        if (player.x > 8) {
+        }
     }
     else if (joypad() & J_RIGHT)
     {
-        if (joypad() & J_UP) player.y -= strafeSpeed;
-        if (joypad() & J_DOWN) player.y += strafeSpeed;
-        if (IS_FRAME_8) animateRight(&player);
-        player.x += movementSpeed;
-        moveCharacter(&player, player.x, player.y);
+        if (player.x < 156) {
+        }
     }
 }
 
@@ -212,7 +200,7 @@ void main()
 
     while (1)
     {
-        processInput();   
+        handleInput();   
         game_time++;
         // sleep(1);
         wait_vbl_done();
