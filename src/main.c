@@ -178,20 +178,20 @@ void animatePlayer()
     }
 }
 
-UBYTE screenEdgeTop() {
-    return player.y > 16;
+UBYTE inputUp() {
+    return joypad() & J_UP && player.y > 16;
 }
 
-UBYTE screenEdgeBottom() {
-    return player.y < 144;
+UBYTE inputDown() {
+    return joypad() & J_DOWN && player.y < 144;
 }
 
-UBYTE screenEdgeLeft() {
-    return player.x > 8;
+UBYTE inputLeft() {
+    return joypad() & J_LEFT && player.x > 8;
 }
 
-UBYTE screenEdgeRight() {
-    return player.x < 154;
+UBYTE inputRight() {
+    return joypad() & J_RIGHT && player.x < 154;
 }
 
 void moveUp() {
@@ -236,28 +236,26 @@ void updateFacing() {
 
 void handleInput()
 {
-    // Get dpad input
-    int key = joypad();
     updateFacing();
 
-    if (key & J_UP && screenEdgeTop()) {
-        if (key & J_LEFT && screenEdgeLeft()) player.x -= strafeSpeed;
-        if (key & J_RIGHT && screenEdgeRight()) player.x += strafeSpeed;
+    if (inputUp()) {
+        if (inputLeft()) player.x -= strafeSpeed;
+        if (inputRight()) player.x += strafeSpeed;
         moveUp();
         if (IS_FRAME_8) animatePlayer();
-    } else if (key & J_DOWN && screenEdgeBottom()) {
-        if (key & J_LEFT && screenEdgeLeft()) player.x -= strafeSpeed;
-        if (key & J_RIGHT && screenEdgeRight()) player.x += strafeSpeed;
+    } else if (inputDown()) {
+        if (inputLeft()) player.x -= strafeSpeed;
+        if (inputRight()) player.x += strafeSpeed;
         moveDown();
         if (IS_FRAME_8) animatePlayer();
-    } else if (key & J_LEFT && screenEdgeLeft()) {
-        if (key & J_UP && screenEdgeTop()) player.y -= strafeSpeed;
-        if (key & J_DOWN && screenEdgeBottom()) player.y += strafeSpeed;
+    } else if (inputLeft()) {
+        if (inputUp()) player.y -= strafeSpeed;
+        if (inputDown()) player.y += strafeSpeed;
         moveLeft();
         if (IS_FRAME_8) animatePlayer();
-    } else if (key & J_RIGHT && screenEdgeRight()) {
-        if (key & J_UP && screenEdgeTop()) player.y -= strafeSpeed;
-        if (key & J_DOWN && screenEdgeBottom()) player.y += strafeSpeed;
+    } else if (inputRight()) {
+        if (inputUp()) player.y -= strafeSpeed;
+        if (inputDown()) player.y += strafeSpeed;
         moveRight();
         if (IS_FRAME_8) animatePlayer();
     }
